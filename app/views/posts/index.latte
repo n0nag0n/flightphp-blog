@@ -1,0 +1,21 @@
+{extends '../layout.latte'}
+
+{block content}
+
+<h1>My Amazing Blog</h1>
+<p>Welcome to my blog!</p>
+<p><a class="button" href="/blog/create">Create a new post</a></p>
+{foreach $posts as $post}
+	{first}
+	<h2>Recent Posts</h2>
+	{/first}
+	<hr>
+	<h3><a href="/blog/{$post->id}">{$post->title}</a></h3>
+	<p><small>By: {$post->username} on {$post->created_at|date:'d.m.Y G:i a'}</small></p>
+	<p>Comments: {count($post->comments)}
+	<p>{$post->content|truncate:100}</p>
+	<hr>
+	<a href="/blog/edit/{$post->id}">Update</a> - <a href="/blog/delete/{$post->id}">Delete</a>
+{/foreach}
+
+{/block}

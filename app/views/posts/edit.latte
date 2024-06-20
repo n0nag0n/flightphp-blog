@@ -1,0 +1,17 @@
+{extends '../layout.latte'}
+
+{block content}
+<h1>Update a Post</h1>
+<form action="/blog/edit/{$post->id}" method="post">
+	<label for="title">Title</label>
+	<input type="text" name="title" placeholder="Title" value="{$post->title}" required>
+
+	<label for="content">Content</label>
+	<label><textarea name="content" placeholder="Content" required>{$post->content}</textarea>
+
+	<label for="username">Username</label>
+	<label><input type="text" name="username" placeholder="Username" value="{$post->username}" required>
+
+	<button type="submit">Update</button>
+</form>
+{/block}

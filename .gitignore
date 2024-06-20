@@ -1,0 +1,9 @@
+vendor/
+.vscode/
+app/config/config.php
+composer.lock
+.vagrant/
+runway
+app/cache/
+app/log/
+app/database.sqlite

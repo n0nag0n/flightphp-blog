@@ -1,0 +1,44 @@
+{
+	"version": "1.0.0",
+    "name": "flightphp/skeleton",
+    "description": "A Flight PHP framework skeleton app to get your new projects up and running ASAP",
+    "keywords": [
+        "microframework",
+        "rest",
+        "restapi",
+        "simple",
+        "easy",
+        "lite",
+		"boilerplate",
+		"skeleton"
+    ],
+    "homepage": "https://docs.flightphp.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "n0nag0n",
+            "email": "n0nag0n@sky-9.com",
+			"role": "lead"
+        }
+    ],
+    "require": {
+		"php": "^7.4 || ^8.0",
+		"ext-json": "*",
+		"flightphp/active-record": "^0.4.7",
+		"flightphp/core": "^3.0",
+		"flightphp/runway": "^0.2",
+		"latte/latte": "^2.11",
+		"tracy/tracy": "^2.9"
+	},
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "scripts": {
+        "start": "php -S localhost:8000 -t public",
+		"post-create-project-cmd": "@php -r \"symlink('vendor/bin/runway', 'runway');\""
+    },
+    "require-dev": {
+        "flightphp/tracy-extensions": "^0.1"
+    }
+}

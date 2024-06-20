@@ -1,0 +1,39 @@
+{extends '../layout.latte'}
+
+{block content}
+<a href="/blog">&lt; Back to blog</a>
+<h1>{$post->title}</h1>
+<p>Created by: {$post->username} on {$post->created_at|date:'d.m.Y G:i a'}.</p>
+<div>
+	{$post->content|breakLines}
+</div>
+<p n:if="$post->update_at">Last update: {$post->update_at|date:'d.m.Y G:i a'}.</p>
+
+<h2>Comments</h2>
+{foreach $post->comments as $comment}
+<div>
+	<p>{$comment->username} on {$comment->created_at|date:'d.m.Y G:i a'}.</p>
+	<div>
+		{$comment->content|breakLines}
+	</div>
+	<hr>
+	<a href="/blog/{$post->id}/comment/{$comment->id}/delete">Delete</a>
+</div>
+{else}
+<p>No comments yet.</p>
+{/foreach}
+
+<h2>Add comment</h2>
+<form action="/blog/{$post->id}/comment" method="post">
+	<div>
+		<label for="username">Username:</label>
+		<input name="username" id="username" placeholder="Username" required />
+	</div>
+	<div>
+		<label for="content">Comment:</label>
+		<textarea name="content" id="content" placeholder="Username" required></textarea>
+	</div>
+	<div>
+		<button type="submit">Add Comment</button>
+	</div>
+{/block}

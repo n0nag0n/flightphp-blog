@@ -1,0 +1,14 @@
+{
+    "index_root": "public\/index.php",
+    "app_root": "app\/",
+    "database": {
+        "driver": "sqlite",
+        "host": "",
+        "port": "",
+        "database": "",
+        "username": "",
+        "password": "",
+        "charset": "",
+        "file_path": "app\/database.sqlite"
+    }
+}
