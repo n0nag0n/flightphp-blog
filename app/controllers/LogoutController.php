@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace app\controllers;
 
-class HomeController extends BaseController
+class LogoutController extends BaseController
 {
 	/**
 	 * Index
@@ -13,6 +13,7 @@ class HomeController extends BaseController
 	 */
 	public function index(): void
 	{
-		$this->render('home.latte', [ 'page_title' => 'Home' ]);
+		$this->session()->destroy();
+		$this->redirect($this->getUrl('blog'));
 	}
 }

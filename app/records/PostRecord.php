@@ -22,7 +22,7 @@ class PostRecord extends \flight\ActiveRecord
      *   https://docs.flightphp.com/awesome-plugins/active-record#relationships
      */
     protected array $relations = [
-		'comments' => [self::HAS_MANY, CommentRecord::class, 'post_id'],
+		//'comments' => [self::HAS_MANY, CommentRecord::class, 'post_id'],
 	];
 
     /**

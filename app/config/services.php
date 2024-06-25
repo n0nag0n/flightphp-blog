@@ -21,14 +21,50 @@ $pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::c
 $app->register('db', $pdoClass, [ $dsn, $config['database']['user'] ?? null, $config['database']['password'] ?? null ]);
 
 $Latte = new \Latte\Engine;
+$Latte->setTempDirectory(__DIR__ . '/../cache/');
+Latte\Bridges\Tracy\LattePanel::initialize($Latte);
+$Latte->addFunction('route', function(string $alias, array $params = []) use ($app) {
+	return $app->getUrl($alias, $params);
+});
+$Latte->addFunction('permission', function(string $permission, ...$args) use ($app) {
+	return $app->permission()->has($permission, ...$args);
+});
+
 $app->map('render', function(string $templatePath, array $data = [], ?string $block = null) use ($app, $Latte) {
 	$templatePath = __DIR__ . '/../views/'. $templatePath;
-	$Latte->setTempDirectory(__DIR__ . '/../cache/');
+	// Add the username that's available in every template.
+	$data = [
+		'username' => $app->session()->getOrDefault('user', '')
+	] + $data;
 	$Latte->render($templatePath, $data, $block);
 });
 
-// Got google oauth stuff? You could register that here
-// $app->register('google_oauth', Google_Client::class, [ $config['google_oauth'] ]);
+// This is a convenience method for temporary redirects
+$app->map('redirect', function(string $url) use ($app) {
+	$app->_redirect($url, 302);
+});
 
-// Redis? This is where you'd set that up
-// $app->register('redis', Redis::class, [ $config['redis']['host'], $config['redis']['port'] ]);
+// Permissions
+$currentRole = $app->session()->getOrDefault('role', 'guest');
+$app->register('permission', \flight\Permission::class, [ $currentRole ]);
+$permission = $app->permission();
+$permission->defineRule('post', function(string $currentRole) {
+    if($currentRole === 'admin') {
+        $permissions = ['create', 'read', 'update', 'delete'];
+    } else if($currentRole === 'editor') {
+        $permissions = ['create', 'read', 'update'];
+    } else {
+        $permissions = ['read'];
+    }
+    return $permissions;
+});
+$permission->defineRule('comment', function(string $currentRole) {
+	if($currentRole === 'admin') {
+		$permissions = ['create', 'read', 'update', 'delete'];
+	} else if($currentRole === 'editor') {
+		$permissions = ['create', 'read', 'update'];
+	} else {
+		$permissions = ['read'];
+	}
+	return $permissions;
+});

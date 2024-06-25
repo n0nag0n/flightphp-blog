@@ -4,20 +4,10 @@ declare(strict_types=1);
 
 namespace app\controllers;
 
-use flight\Engine;
+use app\records\CommentRecord;
 
-class CommentController
+class CommentController extends BaseController
 {
-    /** @var Engine */
-    protected Engine $app;
-
-    /**
-     * Constructor
-     */
-    public function __construct(Engine $app)
-    {
-        $this->app = $app;
-    }
 
 	/**
 	 * Store
@@ -28,13 +18,15 @@ class CommentController
 	 */
 	public function store(int $id): void
 	{
-		$postData = $this->app->request()->data;
-		$CommentRecord = new \app\records\CommentRecord($this->app->db());
+		$postData = $this->request()->data;
+		$CommentRecord = new CommentRecord($this->db());
 		$CommentRecord->post_id = $id;
-		$CommentRecord->username = $postData->username;
+		$CommentRecord->username = $this->session()->get('user');
 		$CommentRecord->content = $postData->content;
+		$CommentRecord->created_at = gmdate('Y-m-d H:i:s');
+		$CommentRecord->updated_at = null;
 		$CommentRecord->save();
-		$this->app->redirect('/blog/' . $id);
+		$this->redirect($this->getUrl('blog_show', [ 'id' => $id ]));
 	}
 
 	/**
@@ -47,10 +39,10 @@ class CommentController
 	 */
 	public function destroy(int $id, int $comment_id): void
 	{
-		$CommentRecord = new \app\records\CommentRecord($this->app->db());
+		$CommentRecord = new CommentRecord($this->db());
 		$CommentRecord->find($comment_id);
 		$CommentRecord->delete();
-		$this->app->redirect('/blog/' . $id);
+		$this->redirect($this->getUrl('blog_show', [ 'id' => $id ]));
 	}
 
 }

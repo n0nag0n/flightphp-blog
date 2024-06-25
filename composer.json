@@ -26,7 +26,9 @@
 		"ext-json": "*",
 		"flightphp/active-record": "^0.4.7",
 		"flightphp/core": "^3.0",
+		"flightphp/permissions": "^0.1.0",
 		"flightphp/runway": "^0.2",
+		"ghostff/session": "^2.1",
 		"latte/latte": "^2.11",
 		"tracy/tracy": "^2.9"
 	},

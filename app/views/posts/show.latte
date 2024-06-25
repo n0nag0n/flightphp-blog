@@ -1,7 +1,7 @@
 {extends '../layout.latte'}
 
 {block content}
-<a href="/blog">&lt; Back to blog</a>
+<a href="{route('blog')}">&lt; Back to blog</a>
 <h1>{$post->title}</h1>
 <p>Created by: {$post->username} on {$post->created_at|date:'d.m.Y G:i a'}.</p>
 <div>
@@ -17,23 +17,24 @@
 		{$comment->content|breakLines}
 	</div>
 	<hr>
-	<a href="/blog/{$post->id}/comment/{$comment->id}/delete">Delete</a>
+	{if permission('comment.destroy')}
+	<a class="pseudo button" href="{route('comment_destroy', [ 'comment_id' => $comment->id ])}">Delete</a>
+	{/if}
 </div>
 {else}
 <p>No comments yet.</p>
 {/foreach}
 
+{if $username}
 <h2>Add comment</h2>
-<form action="/blog/{$post->id}/comment" method="post">
-	<div>
-		<label for="username">Username:</label>
-		<input name="username" id="username" placeholder="Username" required />
-	</div>
+<form action="{route('comment_store')}" method="post">
 	<div>
 		<label for="content">Comment:</label>
-		<textarea name="content" id="content" placeholder="Username" required></textarea>
+		<textarea name="content" id="content" placeholder="Comment" required></textarea>
 	</div>
 	<div>
 		<button type="submit">Add Comment</button>
 	</div>
+</form>
+{/if}
 {/block}
