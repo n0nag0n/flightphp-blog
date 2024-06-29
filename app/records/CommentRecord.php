@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace app\records;
 
+use app\records\PostRecord;
+use Flight;
+
 /**
  * ActiveRecord class for the comments table.
  * @link https://docs.flightphp.com/awesome-plugins/active-record
@@ -14,6 +17,7 @@ namespace app\records;
  * @property string $content
  * @property string $created_at
  * @property string $updated_at
+ * @method PostRecord post()
  */
 class CommentRecord extends \flight\ActiveRecord
 {
@@ -29,8 +33,9 @@ class CommentRecord extends \flight\ActiveRecord
      * Constructor
      * @param mixed $databaseConnection The connection to the database
      */
-    public function __construct($databaseConnection)
+    public function __construct($databaseConnection = null)
     {
+		$databaseConnection = $databaseConnection ?? Flight::db();
         parent::__construct($databaseConnection, 'comments');
     }
 

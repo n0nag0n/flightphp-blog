@@ -39,11 +39,6 @@ $app->map('render', function(string $templatePath, array $data = [], ?string $bl
 	$Latte->render($templatePath, $data, $block);
 });
 
-// This is a convenience method for temporary redirects
-$app->map('redirect', function(string $url) use ($app) {
-	$app->_redirect($url, 302);
-});
-
 // Permissions
 $currentRole = $app->session()->getOrDefault('role', 'guest');
 $app->register('permission', \flight\Permission::class, [ $currentRole ]);

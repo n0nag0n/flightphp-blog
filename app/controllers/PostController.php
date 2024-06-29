@@ -17,9 +17,9 @@ class PostController extends BaseController
 	 */
 	public function index(): void
 	{
-		$PostRecord = new PostRecord($this->db());
+		$PostRecord = new PostRecord();
 		$posts = $PostRecord->order('id DESC')->findAll();
-		$CommentRecord = new CommentRecord($this->db());
+		$CommentRecord = new CommentRecord();
 		foreach($posts as &$post) {
 			$post->comments = $CommentRecord->eq('post_id', $post->id)->findAll();
 		}
@@ -50,12 +50,10 @@ class PostController extends BaseController
 			$this->redirect($this->getUrl('blog'));
 		}
 		$postData = $this->request()->data;
-		$PostRecord = new PostRecord($this->db());
+		$PostRecord = new PostRecord();
 		$PostRecord->title = $postData->title;
 		$PostRecord->content = $postData->content;
 		$PostRecord->username = $this->session()->get('user');
-		$PostRecord->created_at = gmdate('Y-m-d H:i:s');
-		$PostRecord->updated_at = null;
 		$PostRecord->save();
 		$this->redirect($this->getUrl('blog'));
 	}
@@ -68,10 +66,8 @@ class PostController extends BaseController
 	 */
 	public function show(int $id): void
 	{
-		$PostRecord = new PostRecord($this->db());
+		$PostRecord = new PostRecord();
 		$post = $PostRecord->find($id);
-		$CommentRecord = new CommentRecord($this->db());
-		$post->comments = $CommentRecord->eq('post_id', $post->id)->findAll();
 		$this->render('posts/show.latte', [ 'page_title' => $post->title, 'post' => $post]);
 	}
 
@@ -86,7 +82,7 @@ class PostController extends BaseController
 		if($this->permission('post.update') === false) {
 			$this->redirect($this->getUrl('blog'));
 		}
-		$PostRecord = new PostRecord($this->db());
+		$PostRecord = new PostRecord();
 		$post = $PostRecord->find($id);
 		$this->render('posts/edit.latte', [ 'page_title' => 'Update Post', 'post' => $post]);
 	}
@@ -103,11 +99,10 @@ class PostController extends BaseController
 			$this->redirect($this->getUrl('blog'));
 		}
 		$postData = $this->request()->data;
-		$PostRecord = new PostRecord($this->db());
+		$PostRecord = new PostRecord();
 		$PostRecord->find($id);
 		$PostRecord->title = $postData->title;
 		$PostRecord->content = $postData->content;
-		$PostRecord->updated_at = gmdate('Y-m-d H:i:s');
 		$PostRecord->save();
 		$this->redirect($this->getUrl('blog'));
 	}
@@ -123,9 +118,11 @@ class PostController extends BaseController
 		if($this->permission('post.delete') === false) {
 			$this->redirect($this->getUrl('blog'));
 		}
-		$PostRecord = new PostRecord($this->db());
-		$CommentRecord = new CommentRecord($this->db());
-		$CommentRecord->eq('post_id', $id)->delete();
+		$PostRecord = new PostRecord();
+		$CommentRecord = new CommentRecord();
+		$CommentRecord
+			->eq('post_id', $id)
+			->delete();
 		$post = $PostRecord->find($id);
 		$post->delete();
 		$this->redirect($this->getUrl('blog'));

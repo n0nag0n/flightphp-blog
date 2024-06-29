@@ -19,12 +19,10 @@ class CommentController extends BaseController
 	public function store(int $id): void
 	{
 		$postData = $this->request()->data;
-		$CommentRecord = new CommentRecord($this->db());
+		$CommentRecord = new CommentRecord();
 		$CommentRecord->post_id = $id;
 		$CommentRecord->username = $this->session()->get('user');
 		$CommentRecord->content = $postData->content;
-		$CommentRecord->created_at = gmdate('Y-m-d H:i:s');
-		$CommentRecord->updated_at = null;
 		$CommentRecord->save();
 		$this->redirect($this->getUrl('blog_show', [ 'id' => $id ]));
 	}
@@ -39,7 +37,7 @@ class CommentController extends BaseController
 	 */
 	public function destroy(int $id, int $comment_id): void
 	{
-		$CommentRecord = new CommentRecord($this->db());
+		$CommentRecord = new CommentRecord();
 		$CommentRecord->find($comment_id);
 		$CommentRecord->delete();
 		$this->redirect($this->getUrl('blog_show', [ 'id' => $id ]));

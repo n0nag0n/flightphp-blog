@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace app\records;
 
+use app\records\CommentRecord;
+use Flight;
+
 /**
  * ActiveRecord class for the posts table.
  * @link https://docs.flightphp.com/awesome-plugins/active-record
@@ -14,6 +17,7 @@ namespace app\records;
  * @property string $username
  * @property string $created_at
  * @property string $updated_at
+ * @method CommentRecord[] comments()
  */
 class PostRecord extends \flight\ActiveRecord
 {
@@ -22,15 +26,16 @@ class PostRecord extends \flight\ActiveRecord
      *   https://docs.flightphp.com/awesome-plugins/active-record#relationships
      */
     protected array $relations = [
-		//'comments' => [self::HAS_MANY, CommentRecord::class, 'post_id'],
+		'comments' => [self::HAS_MANY, CommentRecord::class, 'post_id'],
 	];
 
     /**
      * Constructor
      * @param mixed $databaseConnection The connection to the database
      */
-    public function __construct($databaseConnection)
+    public function __construct($databaseConnection = null)
     {
+		$databaseConnection = $databaseConnection ?? Flight::db();
         parent::__construct($databaseConnection, 'posts');
     }
 
