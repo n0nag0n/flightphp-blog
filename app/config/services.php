@@ -20,6 +20,8 @@ $dsn = 'sqlite:' . $config['database']['file_path'];
 $pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
 $app->register('db', $pdoClass, [ $dsn, $config['database']['user'] ?? null, $config['database']['password'] ?? null ]);
 
+
+// Configure Latte
 $Latte = new \Latte\Engine;
 $Latte->setTempDirectory(__DIR__ . '/../cache/');
 Latte\Bridges\Tracy\LattePanel::initialize($Latte);
@@ -30,6 +32,7 @@ $Latte->addFunction('permission', function(string $permission, ...$args) use ($a
 	return $app->permission()->has($permission, ...$args);
 });
 
+// Overwrite the render method to use Latte.
 $app->map('render', function(string $templatePath, array $data = [], ?string $block = null) use ($app, $Latte) {
 	$templatePath = __DIR__ . '/../views/'. $templatePath;
 	// Add the username that's available in every template.
@@ -38,6 +41,9 @@ $app->map('render', function(string $templatePath, array $data = [], ?string $bl
 	] + $data;
 	$Latte->render($templatePath, $data, $block);
 });
+
+// Register Session
+$app->register('session', \Ghostff\Session\Session::class);
 
 // Permissions
 $currentRole = $app->session()->getOrDefault('role', 'guest');

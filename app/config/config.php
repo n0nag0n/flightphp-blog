@@ -55,7 +55,7 @@ Debugger::$strictMode = true; // display all errors
 // Debugger::$strictMode = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED; // all errors except deprecated notices
 if (Debugger::$showBar && php_sapi_name() !== 'cli') {
     $app->set('flight.content_length', false); // if Debugger bar is visible, then content-length can not be set by Flight
-	(new TracyExtensionLoader($app));
+	(new TracyExtensionLoader($app, [ 'session_data' => (new \Ghostff\Session\Session())->getAll() ]));
 }
 
 /* 
