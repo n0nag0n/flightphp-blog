@@ -75,7 +75,7 @@ return [
 		// 'password' => 'password'
 
 		// uncomment the following line for sqlite
-		// 'file_path' => __DIR__ . $ds . '..' . $ds . 'database.sqlite'
+		'file_path' => __DIR__ . $ds . '..' . $ds . 'database.sqlite'
 	],
 
 	// this is just here for an example

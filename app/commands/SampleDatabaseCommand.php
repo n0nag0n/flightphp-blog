@@ -6,7 +6,7 @@ namespace flight\commands;
 
 use flight\database\PdoWrapper;
 
-class InitCommand extends AbstractBaseCommand
+class SampleDatabaseCommand extends AbstractBaseCommand
 {
     /**
      * Construct
@@ -15,7 +15,7 @@ class InitCommand extends AbstractBaseCommand
      */
     public function __construct(array $config)
     {
-        parent::__construct('init:blog-sql', 'Creates the database tables you need for this project.', $config);
+        parent::__construct('init:sample-db', 'Creates a sample SQLite database and tables.', $config);
     }
 
     /**
@@ -30,8 +30,8 @@ class InitCommand extends AbstractBaseCommand
         $PdoWrapper = new PdoWrapper('sqlite:'. __DIR__ . '/../database.sqlite');
 
         $io->info('Creating tables...');
-        $PdoWrapper->exec('CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, title TEXT, content TEXT, username TEXT, created_at TEXT, updated_at TEXT NULL)');
-        $PdoWrapper->exec('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, post_id INTEGER, username TEXT, content TEXT, created_at TEXT, updated_at TEXT NULL)');
+        $PdoWrapper->exec('CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, title TEXT, content TEXT, username TEXT, created_at TEXT, updated_at TEXT)');
+        $PdoWrapper->exec('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, post_id INTEGER, username TEXT, content TEXT, created_at TEXT, updated_at TEXT)');
         $io->ok('Tables created!', true);
     }
 }
