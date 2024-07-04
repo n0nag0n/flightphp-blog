@@ -18,6 +18,9 @@ class CommentController extends BaseController
 	 */
 	public function store(int $id): void
 	{
+		if($this->permission('comment.create') === false) {
+			$this->redirect($this->getUrl('blog'));
+		}
 		$postData = $this->request()->data;
 		$CommentRecord = new CommentRecord();
 		$CommentRecord->post_id = $id;
@@ -37,6 +40,9 @@ class CommentController extends BaseController
 	 */
 	public function destroy(int $id, int $comment_id): void
 	{
+		if($this->permission('comment.destroy') === false) {
+			$this->redirect($this->getUrl('blog'));
+		}
 		$CommentRecord = new CommentRecord();
 		$CommentRecord->find($comment_id);
 		$CommentRecord->delete();
