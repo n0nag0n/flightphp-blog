@@ -1,6 +1,6 @@
 # Flight PHP Blog App
 
-This is the example code that goes along with the tutorial on [Dev.to](https://dev.to/n0nag0n/building-a-simple-blog-with-flight-54l9)
+This is the example code that goes along with the tutorial on [Dev.to](https://dev.to/n0nag0n/building-a-simple-blog-with-flight-part-1-4ap8)
 
 ## Installation
 
